@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+
 @Service
 public class AnimalService {
      private static final Logger logger = LoggerFactory.getLogger(AnimalService.class);
@@ -59,5 +61,20 @@ public class AnimalService {
     
         return animales;
     }
+
+    public List<Animal> getAnimalsByCategory(String category) throws IOException {
+        List<Animal> animales = getAnimalAll();
+        return animales.stream()
+                      .filter(animal -> animal.getCategory().equalsIgnoreCase(category))
+                      .collect(Collectors.toList());
+    }
+
+    public List<Animal> getAnimalsByNameLength(int maxLength) throws IOException {
+        List<Animal> animales = getAnimalAll();
+        return animales.stream()
+                      .filter(animal -> animal.getName().length() < maxLength)
+                      .collect(Collectors.toList());
+    }
+
 }
 
