@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,18 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 import co.edu.uptc.animals_rest.models.Animal;
 import co.edu.uptc.animals_rest.services.AnimalService;
 
-
-
-
 @RestController
 @RequestMapping("/animal")
 public class AnimalController {
 
- private static final Logger logger = LoggerFactory.getLogger(AnimalController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AnimalController.class);
 
-   @Autowired
+    @Autowired
     private AnimalService animalService;
-
 
     @GetMapping("/all")
     public List<Animal> getAnimalAll() throws IOException {
@@ -39,5 +36,16 @@ public class AnimalController {
         return animalService.getAnimalInRange(from, to);
     }
 
+    @GetMapping("/category/{category}")
+    public List<Animal> getAnimalByCategory(@PathVariable String category) throws IOException {
+        logger.info("getAnimalByCategory called with parameter: category = {}", category);
+        return animalService.getAnimalsByCategory(category);
+    }
+
+    @GetMapping("name-length/{maxLength}")
+    public List<Animal> getAnimalByName(@PathVariable int maxLength) throws IOException {
+        logger.info("getAnimalByName called with parameter: name = {}", maxLength);
+        return animalService.getAnimalsByMaxNameLength(maxLength);
+    }
 
 }
